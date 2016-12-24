@@ -1,9 +1,16 @@
-# DotEngine java server sdk
+import dot.cc.DotEngine;
+import dot.cc.exception.GenerateTokenException;
 
-### use explame
+/**
+ * Created by haizhu on 2016/12/24.
+ * <p>
+ * haizhu12345@gmail.com
+ */
+public class Test {
 
-```java
-        String appKey = "key";
+    public static void main(String args[]) {
+
+        String appKey = "appLey";
         String appSecret = "secret";
 
         //init appKey appSecret
@@ -24,6 +31,7 @@
             //set  room user expireTime
             token = dotEngine.createToken("room", "user", 24 * 36000);
 
+
         } catch (GenerateTokenException e) {
             //create token   failure
             e.printStackTrace();
@@ -32,19 +40,5 @@
         //get result token  ; if failure return  null
         System.out.println(token);
     }
-```
 
-###  dependency
-
-```xml
-       <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
-            <version>0.7.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.8.1</version>
-        </dependency>
-```
+}
