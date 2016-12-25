@@ -24,7 +24,7 @@ public class Test {
         dotEngine.setReadTimeout(2000);
 
         //enable log
-        dotEngine.enableLog();
+//        dotEngine.enableLog();
 
         String token = null;
         try {

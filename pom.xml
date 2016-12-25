@@ -61,11 +61,6 @@
             <version>${jackjson.version}</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>com.nimbusds</groupId>
-            <artifactId>nimbus-jose-jwt</artifactId>
-            <version>4.13.1</version>
-        </dependency>
     </dependencies>
 
 
