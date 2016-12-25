@@ -6,11 +6,16 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Random;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import dot.cc.exception.GenerateTokenException;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import jdk.nashorn.internal.parser.JSONParser;
 
 /**
  * Created by haizhu on 2016/12/24.
@@ -23,6 +28,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class DotEngine {
 
     private final JwtBuilder jwtBuilder;
+
+    private final ObjectMapper objectMapper;
 
     private String dot_engine_api_url = "http://api.dot.cc/api/createToken";
 
@@ -44,8 +51,7 @@ public class DotEngine {
     }
 
     private static final String FORMAT = "{" + "\"room\":\"%s\"," + "\"user_id\":\"%s\","
-            + "\"app_key\":\"%s\"," + "\"expires\":%d," + "\"role\":\"%S\"," + "\"nonce\":\"%S\""
-            + "}";
+            + "\"app_key\":\"%s\"," + "\"expires\":%d," + "\"role\":\"%S\"," + "\"nonce\":%d" + "}";
 
     /**
      * init by appKey appSecret
@@ -57,9 +63,12 @@ public class DotEngine {
         this.app_key = appKey;
         this.app_secret = appSecret;
 
-        jwtBuilder = Jwts.builder().signWith(SignatureAlgorithm.HS256, app_secret);
-
+        jwtBuilder = Jwts.builder().signWith(SignatureAlgorithm.HS256, app_secret.getBytes())
+                .setHeaderParam("alg", "HS256")//
+                .setHeaderParam("typ", "JWT");//这是一个坑
         jwtBuilder.setSubject("test").compact();
+
+        objectMapper = new ObjectMapper();
     }
 
     /**
@@ -83,7 +92,7 @@ public class DotEngine {
      * 
      * @return
      */
-    public String getJWTData(String room, String user, long expireTime, String role, String nonce)
+    public String getJWTData(String room, String user, long expireTime, String role, int nonce)
             throws GenerateTokenException {
         return String.format(FORMAT, room, user, app_key, expireTime, role, nonce);
     }
@@ -97,11 +106,11 @@ public class DotEngine {
      * @throws GenerateTokenException
      * 
      * @see DotEngine#getJWTData(java.lang.String, java.lang.String, long,
-     *      java.lang.String, java.lang.String)
+     *      java.lang.String, int)
      */
     public String createToken(String room, String user, long expireTime)
             throws GenerateTokenException {
-        return createToken(room, user, expireTime, "", "");
+        return createToken(room, user, expireTime, "");
     }
 
     /**
@@ -111,15 +120,13 @@ public class DotEngine {
      * @param user
      * @param expireTime
      * @param role
-     * @param nonce
      * @return
-     * @see DotEngine#getJWTData(java.lang.String, java.lang.String, long,
-     *      java.lang.String, java.lang.String)
      */
-    public String createToken(String room, String user, long expireTime, String role, String nonce)
+    public String createToken(String room, String user, long expireTime, String role)
             throws GenerateTokenException {
 
-        String srcData = getJWTData(room, user, expireTime, role, nonce);
+        int not = new Random().nextInt(9999999);
+        String srcData = getJWTData(room, user, expireTime, role, not);
         if (debug) {
             System.out.println("get jwt src data=" + srcData);
         }
@@ -130,11 +137,29 @@ public class DotEngine {
                     + "ms encode =" + data);
         }
 
-        return getToken(data);
+        String responseJson = getResponseJson(data);
+        if (debug) {
+            System.out.println("responseJson=" + responseJson);
+        }
+        if (responseJson.length() > 0) {
+            try {
+                JsonNode jsonpObject = objectMapper.readTree(responseJson);
+                JsonNode e = jsonpObject.get("e");
+                if (e != null && e.asText().length() > 0) {
+                    throw new GenerateTokenException(e.asText());
+                }
+                return jsonpObject.get("d").get("token").asText();
 
+            } catch (IOException e) {
+                throw new GenerateTokenException(
+                        "can'n parse response :" + responseJson + "\n" + e.getMessage());
+            }
+        } else {
+            throw new GenerateTokenException("response return failure");
+        }
     }
 
-    private String getToken(String data) throws GenerateTokenException {
+    private String getResponseJson(String data) throws GenerateTokenException {
 
         BufferedInputStream in = null;
         try {
