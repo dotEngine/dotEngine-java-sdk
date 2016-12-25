@@ -10,8 +10,8 @@ public class Test {
 
     public static void main(String args[]) {
 
-        String appKey = "dotcc";
-        String appSecret = "dotcc";
+        String appKey = "you appKey";
+        String appSecret = "you appSecret";
 
         //init appKey appSecret
         //NOTE init is  slow ,It will be cost 5s
