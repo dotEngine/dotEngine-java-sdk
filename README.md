@@ -36,6 +36,18 @@
 
 ###  dependency
 
+locat project dependency
+
+```xml
+<dependency>
+    <groupId>cc.dot</groupId>
+    <artifactId>dotEngine-java-sdk</artifactId>
+    <version>0.1.0</version>
+</dependency>
+
+```
+
+
 ```xml
        <dependency>
             <groupId>io.jsonwebtoken</groupId>

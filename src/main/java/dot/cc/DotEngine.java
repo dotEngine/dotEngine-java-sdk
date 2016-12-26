@@ -56,8 +56,8 @@ public class DotEngine {
     /**
      * init by appKey appSecret
      * 
-     * @param appKey
-     * @param appSecret
+     * @param appKey you app key
+     * @param appSecret you app secret
      */
     public DotEngine(String appKey, String appSecret) {
         this.app_key = appKey;
@@ -72,7 +72,7 @@ public class DotEngine {
     }
 
     /**
-     * </>
+     *
      * default not need set
      * 
      * @param url set engine api url
@@ -90,7 +90,7 @@ public class DotEngine {
      * @param nonce not use yet
      * @throws GenerateTokenException if failure return exception
      * 
-     * @return
+     * @return get jwt src data
      */
     public String getJWTData(String room, String user, long expireTime, String role, int nonce)
             throws GenerateTokenException {
@@ -98,12 +98,12 @@ public class DotEngine {
     }
 
     /**
-     * 
-     * @param room
-     * @param user
-     * @param expireTime
-     * @return
-     * @throws GenerateTokenException
+     *
+     * @param room room
+     * @param user userName
+     * @param expireTime expire time
+     * @return create token
+     * @throws GenerateTokenException   throw msg when  get token failure
      * 
      * @see DotEngine#getJWTData(java.lang.String, java.lang.String, long,
      *      java.lang.String, int)
@@ -116,13 +116,13 @@ public class DotEngine {
     /**
      * 
      * 
-     * @param room
-     * @param user
-     * @param expireTime
-     * @param role
-     * @return
+     * @param room room
+     * @param user userName
+     * @param expireTime expire time
+     * @param role role default null
+     * @return create token
      */
-    public String createToken(String room, String user, long expireTime, String role)
+    private String createToken(String room, String user, long expireTime, String role)
             throws GenerateTokenException {
 
         int not = new Random().nextInt(9999999);
@@ -222,7 +222,7 @@ public class DotEngine {
     /**
      * default 10s
      * 
-     * @param connectTimeout
+     * @param connectTimeout connect timeout
      */
     public void setConnectTimeout(int connectTimeout) {
         this.connectTimeout = connectTimeout;
@@ -231,7 +231,7 @@ public class DotEngine {
     /**
      * default 10s
      * 
-     * @param readTimeout
+     * @param readTimeout read timeout
      */
     public void setReadTimeout(int readTimeout) {
         this.readTimeout = readTimeout;

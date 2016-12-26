@@ -5,9 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>cc.dot</groupId>
-    <artifactId>dotEngine</artifactId>
-    <version>${dot.java.version}</version>
+    <artifactId>dotEngine-java-sdk</artifactId>
+    <version>0.1.0</version>
     <packaging>jar</packaging>
+    <name>dotEngine-java-sdk</name>
+    <description>dot engine java sdk</description>
+    <url>https://github.com/dotEngine/dotEngine-java-sdk</url>
 
     <licenses>
         <license>
@@ -28,12 +31,24 @@
         <url>https://github.com/dotEngine/dotEngine-java-sdk/issues</url>
     </issueManagement>
     <ciManagement>
-        <system>web site</system>
+        <system>Web site</system>
         <url>http://dot.cc</url>
     </ciManagement>
 
+    <developers>
+        <developer>
+            <name>denghaizhu</name>
+            <email>haizhu12345@gmail.com</email>
+        </developer>
+        <developer>
+            <name>liulianxiang</name>
+            <email>notedit@gmail.com</email>
+        </developer>
+    </developers>
+
+
+
     <properties>
-        <dot.java.version>0.1.0</dot.java.version>
         <github_account>dotEngine</github_account>
         <jwt.version>0.7.0</jwt.version>
         <jackjson.version>2.8.1</jackjson.version>
@@ -64,27 +79,77 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
-    <project>
-        <!--Add repositories-->
-        <repositories>
-            <repository>
-                <id>dotEngine-maven-snapshot-repository</id>
-                <name>dotEngine-maven-snapshot-repository</name>
-                <url>https://raw.github.com/${github_account}/maven/snapshot/</url>
-            </repository>
-            <repository>
-                <id>dotEngine-maven-release-repository</id>
-                <name>dotEngine-maven-release-repository</name>
-                <url>https://raw.github.com/${github_account}/maven/release/</url>
-            </repository>
-        </repositories>
-        <!-- Add dependencies -->
-        <dependencies>
-            <dependency>
-                <artifactId>cc.dot</artifactId>
-                <groupId>dotEngine-java-sdk</groupId>
-                <version>${dot.java.version}</version>
-            </dependency>
-        </dependencies>
-    </project>
+
+
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.7</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+
+
+        </plugins>
+    </build>
+
+
 </project>
