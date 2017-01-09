@@ -36,7 +36,9 @@
 
 ###  dependency
 
-locat project dependency
+project dependency
+
+https://oss.sonatype.org/content/groups/staging/cc/dot/dotEngine-java-sdk/
 
 ```xml
 <dependency>
