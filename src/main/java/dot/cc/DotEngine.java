@@ -31,7 +31,7 @@ public class DotEngine {
 
     private final ObjectMapper objectMapper;
 
-    private String dot_engine_api_url = "http://api.dot.cc/api/createToken";
+    private String dot_engine_api_url = "https://janus.dot.cc/api/createToken";
 
     private final String app_key;
 
@@ -50,8 +50,8 @@ public class DotEngine {
         this.debug = true;
     }
 
-    private static final String FORMAT = "{" + "\"room\":\"%s\"," + "\"user_id\":\"%s\","
-            + "\"app_key\":\"%s\"," + "\"expires\":%d," + "\"role\":\"%S\"," + "\"nonce\":%d" + "}";
+    private static final String FORMAT = "{" + "\"room\":\"%s\"," + "\"user\":\"%s\","
+            + "\"appkey\":\"%s\"," + "\"expires\":%d," + "\"role\":\"%S\"," + "\"nonce\":%d" + "}";
 
     /**
      * init by appKey appSecret
@@ -179,7 +179,7 @@ public class DotEngine {
 
             BufferedOutputStream out = new BufferedOutputStream(urlConn.getOutputStream());
             StringBuilder paramsContent = new StringBuilder();
-            paramsContent.append("app_key=").append(URLEncoder.encode(app_key, "UTF-8"));
+            paramsContent.append("appkey=").append(URLEncoder.encode(app_key, "UTF-8"));
             paramsContent.append("&sign=").append(URLEncoder.encode(data, "UTF-8"));
             out.write(paramsContent.toString().getBytes("UTF-8"));
             out.flush();
