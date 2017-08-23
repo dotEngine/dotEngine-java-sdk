@@ -66,7 +66,7 @@ public class DotEngine {
         jwtBuilder = Jwts.builder().signWith(SignatureAlgorithm.HS256, app_secret.getBytes())
                 .setHeaderParam("alg", "HS256")//
                 .setHeaderParam("typ", "JWT");//这是一个坑
-        jwtBuilder.setSubject("test").compact();
+        jwtBuilder.setPayload("test").compact();
 
         objectMapper = new ObjectMapper();
     }
@@ -131,7 +131,7 @@ public class DotEngine {
             System.out.println("get jwt src data=" + srcData);
         }
         long time = System.currentTimeMillis();
-        String data = jwtBuilder.setSubject(srcData).compact();
+        String data = jwtBuilder.setPayload(srcData).compact();
         if (debug) {
             System.out.println("get jwt src cost=" + (System.currentTimeMillis() - time)
                     + "ms encode =" + data);
